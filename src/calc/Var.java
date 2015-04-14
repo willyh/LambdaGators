@@ -1,12 +1,16 @@
 package calc;
-public class Var implements Term {
-	private String symbol;
 
-	public Var(String symbol) {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Var implements Term {
+	private int symbol;
+
+	public Var(int symbol) {
 		this.symbol = symbol;
 	}
 	
-	public String getSymbol() {
+	public int getSymbol() {
 		return this.symbol;
 	}
 
@@ -14,6 +18,15 @@ public class Var implements Term {
 	public Term sub(Term X, Var x2) {
 		if (this.equals(x2)) {
 			return X;
+		} else {
+			return this;
+		}
+	}
+
+	@Override
+	public Term rebind(Var x, Var y) {
+		if (this.equals(x)) {
+			return y;
 		} else {
 			return this;
 		}
@@ -31,17 +44,20 @@ public class Var implements Term {
 		}
 	}
 	
+	public int hashCode() {
+		return this.symbol;
+	}
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof Var)) {
 			return false;
 		} else {
 			Var v = (Var) o;
-			return this.symbol.equals(v.symbol);
+			return this.symbol == v.symbol;
 		}
 	}
 	
 	public String toString() {
-		return this.symbol;
+		return this.symbol + "";
 	}
 
 	@Override
@@ -57,5 +73,12 @@ public class Var implements Term {
 	@Override
 	public int width() {
 		return 1;
+	}
+
+	@Override
+	public Set<Var> getVariables() {
+		Set<Var> var = new HashSet<Var>();
+		var.add(this);
+		return var;
 	}
 }
