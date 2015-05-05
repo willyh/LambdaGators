@@ -1,15 +1,12 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
-import javax.swing.Timer;
 
 public class Engine implements Runnable {
 	public static void main(String[] args) {

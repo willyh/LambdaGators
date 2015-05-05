@@ -81,4 +81,25 @@ public class Var implements Term {
 		var.add(this);
 		return var;
 	}
+	
+	@Override
+	public Set<Var> getBoundVariables() {
+		Set<Var> var = new HashSet<Var>();
+		return var;
+	}
+
+	@Override
+	public Term alpha() {
+		return this;
+	}
+
+	@Override
+	public Term alpha(int max) {
+		return this;
+	}
+
+	@Override
+	public Term rebindFree(Var u, Var var) {
+		return this.equals(u) ? var : this;
+	}
 }

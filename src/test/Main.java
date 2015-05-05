@@ -51,33 +51,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		Term identity = new Lambda(new Var(0), new Var(0));
-		System.out.println("I=" + identity);
-		
-		Application test = new Application(new Application(K(), K()), Kstar());
-		System.out.println("Test: " + test + " -> " + test.beta());
-		
-		Application test2 = new Application(new Application(Kstar(), K()), Kstar());
-		System.out.println("Test: " + test2 + " -> " + test2.beta());
-		
-		Application Omega = new Application(omega(), omega());
-		System.out.println(Omega + " -> " + Omega.beta());
-		
-		System.out.println("0 = " + N(0));
-		
-		System.out.println("3 = " + N(3));
-		System.out.println("0 + 0 = " + Plus(N(0), N(0)).beta().beta());
-		/*
-		Term n = N(0);
-		for (int i = 0; i < 3; ++i) {
-			n = S(n).beta().beta();
-			System.out.println("S(" + i + ") -> " + n);
-		}
-		*/
-		// Lzxy.z(
-		// Lxy.xy Lxy.xxy -> Lxy.xxxy
-		
-		//System.out.println(new Application(Y(), Y()).beta());
-				// Lxy.(y(xxy))(y(xxy))
+		Term t = Library.parse("V(La.ax)z").alpha();
+		System.out.println(t.toString());
 	}
 }

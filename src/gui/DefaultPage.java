@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,12 +16,19 @@ public class DefaultPage extends Page {
 	 * 
 	 */
 	private static final long serialVersionUID = 527036147507436562L;
-	private String[] termNames = { "K", "K*", "2++", "2+2" };
+	private String[] termNames = { "K", "K*", "omega", "2++", "2+2", "Y turing", "xK", "Push", "Pop", "Code", "times" };
 	private Term[] terms = {
-			new Application(new Application(Library.K, new Var(3)), new Var(4)),
-			new Application(new Application(Library.Kstar, new Var(3)), new Var(4)),
-			new Application(Library.S, Library.N(2)),
-			Library.Plus(Library.N(2), Library.N(2))
+			new Application(new Application(Library.K, Library.I(2)), Library.I(3)).alpha(),
+			new Application(new Application(Library.Kstar, Library.I(2)), Library.I(3)).alpha(),
+			new Application(Library.omega(0), Library.omega(1)).alpha(),
+			new Application(Library.S, Library.N(2)).alpha(),
+			Library.Plus(Library.N(2), Library.N(2)).alpha(),
+			Library.Y.alpha(),
+			Library.parse("(Lx.x(Luv.u))(Lxyz.y)").alpha(),
+			Library.parse("V3(La.a5)").alpha(),
+			Library.parse("^(La.a5E)").alpha(),
+			new Application(new Lambda(new Var(6),new Application(Library.Y, new Application(new Application(Library.parse("Lunf.n(fu((Lzqy.q(zqy))n))u"), new Var(6)), Library.N(0)))), Library.K).alpha(),
+			Library.parse("Y(Lfs.s(f*)x)K").alpha()
 			};
 	private Game game;
 
@@ -29,29 +37,36 @@ public class DefaultPage extends Page {
 		this.game = g;
 	}
 
-	int maxWidth = 5;
+	int maxWidth = 3;
 	int maxHeight = 10;
 	int width = Game.WIDTH / maxWidth;
 	int height = Game.HEIGHT / maxHeight;
 
 	private int getX(int i) {
-		return (i % maxWidth) * width + 100;
+		return (i % maxWidth) * width + 50;
 	}
 
 	private int getY(int i) {
-		return (i / maxWidth) * height + 100;
+		return (i / maxWidth) * height + 50;
 	}
 
 	private int getIndex(int x, int y) {
-		return (x - 100) / width + (y - 100) / height * maxWidth;
+		return (x - 50) / width + (y - 50) / height * maxWidth;
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		for (int i = 0; i < termNames.length; ++i) {
+			g2d.setColor((i % 2) == 1 ? Color.cyan : Color.pink);
+			int x = getX(i);
+			int y = getY(i);
+			g2d.fillRect(x, y, width, height);
+			g2d.setColor(Color.black);
 			g2d.setFont(new Font("SanSerif", Font.PLAIN, 50));
-			g2d.drawString(termNames[i], getX(i), getY(i));
+			
+			// add height b/c draw string is weird
+			g2d.drawString(termNames[i], x, y + height);
 		}
 	}
 

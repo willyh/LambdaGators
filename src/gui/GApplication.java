@@ -100,6 +100,7 @@ public class GApplication extends Application implements GTerm {
 	
 	public Term beta() {
 		if (this.getLeft() instanceof GLambda) {
+			Animation.queue(new LeftEatRight(((GLambda)this.getLeft()).getVar(), this.getRight()));
 			leftEatRight();
 		}
 		return super.beta();

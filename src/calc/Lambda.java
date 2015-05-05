@@ -68,8 +68,40 @@ public class Lambda implements Term {
 		vars.add(u);
 		return vars;
 	}
+	
+	@Override
+	public Set<Var> getBoundVariables() {
+		Set<Var> vars = U.getBoundVariables();
+		vars.add(u);
+		return vars;
+	}
 
 	public void setAbstraction(Term sub) {
 		this.U = sub;
+	}
+
+	@Override
+	public Term alpha() {
+		return new Lambda(this.getVar(), this.getAbstraction().alpha());
+	}
+
+	@Override
+	public Term alpha(int max) {
+		// if U rebinds u later on then change u to a different var
+		// and fix all variables bound to this u
+		if (getAbstraction().getBoundVariables().contains(u)) {
+			Var rebound = new Var(max+1);
+			return new Lambda(rebound, this.getAbstraction().rebindFree(u,rebound).alpha(max+1));
+		}
+		return new Lambda(this.getVar(), this.getAbstraction().alpha(max));
+	}
+
+	@Override
+	public Term rebindFree(Var u, Var var) {
+		if (u.equals(this.u)) {
+			return this;
+		} else {
+			return new Lambda(this.u, this.U.rebindFree(u, var));
+		}
 	}
 }

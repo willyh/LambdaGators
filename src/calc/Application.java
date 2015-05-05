@@ -29,14 +29,21 @@ public class Application implements Term {
 	}
 
 	public Term alpha() {
-		if (U instanceof Application) {
-			return new Application(((Application) U).alpha(), V);
-			
-		} else if (U instanceof Lambda) {
+		int max = 0;
+		for (Var vl : this.getVariables()) {
+			max = Math.max(max, vl.getSymbol());
+		}
+		return this.alpha(max);
+	}
+
+	public Term alpha(int numBound) {
+		Term newV = V;
+		int max = numBound;
+		if (U instanceof Lambda) {
 			Lambda l = (Lambda) U;
 			// rebind variables in V that are bound in U
-			Set<Var> leftVars = l.getAbstraction().getVariables();
-			Set<Var> rightVars = V.getVariables();
+			Set<Var> leftVars = l.getAbstraction().getBoundVariables();
+			Set<Var> rightVars = V.getBoundVariables();
 			Set<Var> intersect = new HashSet<Var>();
 			for (Var v : leftVars) {
 				if (rightVars.contains(v)) {
@@ -46,19 +53,14 @@ public class Application implements Term {
 			// don't wanna remove the var we are subbing for tho
 			rightVars.remove(l.getVar());
 			// find a new element that isn't in L
-			int max = 0;
-			for (Var vl : leftVars) {
-				max = Math.max(max, vl.getSymbol());
-			}
-			
-			Term newV = V;
+
 			for (Var v : intersect) {
 				Var rebind = new Var(++max);
 				newV = newV.rebind(v, rebind);
 			}
-			return new Application(U, newV);
 		}
-		return this;
+
+		return new Application(U.alpha(max), newV.alpha(max));
 	}
 
 	@Override
@@ -99,6 +101,19 @@ public class Application implements Term {
 		Set<Var> right = V.getVariables();
 		left.addAll(right);
 		return left;
+	}
+
+	@Override
+	public Set<Var> getBoundVariables() {
+		Set<Var> left = U.getBoundVariables();
+		Set<Var> right = V.getBoundVariables();
+		left.addAll(right);
+		return left;
+	}
+
+	@Override
+	public Term rebindFree(Var u, Var var) {
+		return new Application(U.rebindFree(u, var), V.rebindFree(u, var));
 	}
 
 }

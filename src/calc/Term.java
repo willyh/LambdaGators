@@ -13,4 +13,16 @@ public interface Term {
 	public int width();
 	public Set<Var> getVariables();
 	public Term rebind(Var x, Var y);
+	public Term alpha();
+	public Term alpha(int max);
+	public Set<Var> getBoundVariables();
+	
+	/** 
+	 * Rebind free instances of u with var in the term
+	 * 
+	 * @param u
+	 * @param var
+	 * @return
+	 */
+	public Term rebindFree(Var u, Var var);
 }

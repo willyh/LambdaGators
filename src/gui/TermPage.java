@@ -47,17 +47,13 @@ public class TermPage extends Page implements Runnable {
 		if (ret != null) {
 			term = ret;
 		}
+
+		ret = term.alpha();
+		if (ret != null) {
+			term = ret;
+		}
 		gterm = Util.convert(term, gterm.getX(), gterm.getY(), gterm.getWidth()
 				* term.width(), height);
-
-		if (term instanceof Application) {
-			ret = ((Application) term).alpha();
-			if (ret != null) {
-				term = ((Application) term).alpha();
-			}
-			gterm = Util.convert(term, gterm.getX(), gterm.getY(),
-					gterm.getWidth() * term.width(), height);
-		}
 	}
 
 	@Override
@@ -90,19 +86,19 @@ public class TermPage extends Page implements Runnable {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -114,7 +110,7 @@ public class TermPage extends Page implements Runnable {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -131,7 +127,7 @@ public class TermPage extends Page implements Runnable {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

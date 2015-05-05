@@ -78,7 +78,7 @@ public class Util {
 			int width = v.getWidth();
 			int height = v.getHeight();
 			drawColoredImage(coloredGator, gatorSolid,
-					colors.get(v.getSymbol()));
+					colors.get(v.getSymbol() % colors.size()));
 			g.drawImage(coloredGator, x + xoffset, y + yoffset, width, height,
 					null);
 			g.drawImage(gatorOutline, x + xoffset, y + yoffset, width, height,
@@ -90,7 +90,7 @@ public class Util {
 			int y = v.getY();
 			int width = v.getWidth();
 			int height = v.getHeight();
-			drawColoredImage(coloredEgg, eggSolid, colors.get(v.getSymbol()));
+			drawColoredImage(coloredEgg, eggSolid, colors.get(v.getSymbol() % colors.size()));
 			g.drawImage(coloredEgg, x + xoffset, y + yoffset, width, height,
 					null);
 			g.drawImage(eggOutline, x + xoffset, y + yoffset, width, height,

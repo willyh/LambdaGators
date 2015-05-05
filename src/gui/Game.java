@@ -15,7 +15,7 @@ public class Game {
 
 	public Game() {
 		Game.Default = new DefaultPage("Default", this);
-		frame = new JFrame("Paku Paku Wani");
+		frame = new JFrame("Pakkun");
 		this.setCurrentPage(Game.Default);
 		frame.setSize(WIDTH, HEIGHT);
 		frame.setVisible(true);
