@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import animation.Animation;
+import animation.Pause;
 import calc.Application;
 import calc.Term;
 
@@ -22,9 +24,11 @@ public class TermPage extends Page implements Runnable {
 	private volatile GTerm gterm;
 	private final Object updateLock;
 	private int height, width;
+	private boolean alive;
 
 	public TermPage(String title, Game g, Term term) {
 		super(title, g);
+		this.alive = true;
 		this.width = Game.WIDTH;
 		this.height = Game.HEIGHT - 50;
 		this.term = term;
@@ -33,39 +37,49 @@ public class TermPage extends Page implements Runnable {
 
 		Thread th = new Thread(this);
 		th.start();
-
+	}
+	
+	public void close() {
+		this.alive = false;
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		Util.drawTerm(gterm, xoffset, yoffset, g2d);
 	}
 
 	public void update() {
-		Term ret = gterm.beta();
-		if (ret != null) {
-			term = ret;
-		}
+		synchronized (Animation.animationLock) {
+			Term ret = gterm.beta();
+			if (ret != null) {
+				term = ret;
+			}
 
-		ret = term.alpha();
-		if (ret != null) {
-			term = ret;
+			ret = term.alpha();
+			if (ret != null) {
+				term = ret;
+			}
+			Animation.animationLock.notify();
 		}
-		gterm = Util.convert(term, gterm.getX(), gterm.getY(), gterm.getWidth()
-				* term.width(), height);
 	}
 
 	@Override
 	public void run() {
-		while (true) {
+		while (alive) {
 			synchronized (updateLock) {
 				try {
 					updateLock.wait();
-					update();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				update();
+				Animation.queue(new Pause(3));
+				Animation.animationWait();
+				gterm = Util.convert(term, gterm.getX(), gterm.getY(),
+						gterm.getWidth() * term.width(), height);
+				this.repaint();
 			}
 		}
 	}
@@ -105,6 +119,7 @@ public class TermPage extends Page implements Runnable {
 	public void mouseDragged(MouseEvent e) {
 		xoffset = e.getX() - xstart;
 		yoffset = e.getY() - ystart;
+		this.getGame().repaint();
 	}
 
 	@Override

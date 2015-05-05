@@ -8,6 +8,8 @@ import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
+import animation.Animation;
+
 public class Engine implements Runnable {
 	public static void main(String[] args) {
 		try {
@@ -39,7 +41,7 @@ public class Engine implements Runnable {
 		Util.colors.put(8, Color.BLACK);
 		Util.colors.put(9, Color.DARK_GRAY);
 		Util.colors.put(10, Color.RED);
-		
+
 		Thread t = new Thread(new Engine());
 		t.start();
 	}
@@ -47,11 +49,15 @@ public class Engine implements Runnable {
 	@Override
 	public void run() {
 		Game g = new Game();
-		
 		try {
 			while (true) {
-				g.repaint();
-				Thread.sleep(50);
+				synchronized (Animation.animationLock) {
+					Animation.animationLock.wait();
+					while (Animation.nextFrame()) {
+						g.repaint();
+						Thread.sleep(50);
+					}
+				}
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

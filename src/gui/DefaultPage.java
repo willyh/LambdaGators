@@ -133,4 +133,10 @@ public class DefaultPage extends Page {
 
 	}
 
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -1,5 +1,8 @@
 package gui;
 
+import animation.Animation;
+import animation.LeftEatRight;
+import animation.Shake;
 import calc.Application;
 import calc.Term;
 import calc.Var;
@@ -29,44 +32,6 @@ public class GApplication extends Application implements GTerm {
 		this.U = U;
 		this.V = V;
 	}
-	
-	public void leftEatRight() {
-		GVar v = ((GLambda)this.getLeft()).getVar();
-		int xstart = v.getX();
-		int time = 500/50; //milliseconds
-		int rate = (this.getRight().getX() - v.getX())/time;
-		while(v.getX() < this.getRight().getX()) {
-			v.setX(v.getX() + rate);
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				System.err.println("Interrupted");
-				System.exit(0);
-			}
-		}
-		this.getRight().setWidth(0);
-		while(v.getX() > xstart) {
-			v.setX(v.getX() - rate);
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				System.err.println("Interrupted");
-				System.exit(0);
-			}
-		}
-		rate = v.getHeight()/time;
-		while (v.getHeight() > 0) {
-			v.setHeight(v.getHeight()-rate);
-			v.setY(v.getY() + rate);
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				System.err.println("Interrupted");
-				System.exit(0);
-			}
-		}
-		v.setHeight(0);
-	}
 
 	public Term sub(Term U, Var u) {
 		Application replacement = (Application) super.sub(U, u);
@@ -74,25 +39,13 @@ public class GApplication extends Application implements GTerm {
 		if (this.U instanceof GVar) {
 			GVar uvar = (GVar) this.U;
 			if (uvar.equals(u)) {
-				uvar.shakeAnimation();
-				this.U = replacement.getLeft();
-				try {
-					Thread.sleep(Game.EGG_HATCH_TIME);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Animation.queue(new Shake(uvar));
 			}
 		}
 		if (this.V instanceof GVar) {
 			GVar vvar = (GVar) this.V;
 			if (vvar.equals(u)) {
-				vvar.shakeAnimation();
-				this.V = replacement.getRight();
-				try {
-					Thread.sleep(Game.EGG_HATCH_TIME);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Animation.queue(new Shake(vvar));
 			}
 		}
 		return replacement;
@@ -101,7 +54,6 @@ public class GApplication extends Application implements GTerm {
 	public Term beta() {
 		if (this.getLeft() instanceof GLambda) {
 			Animation.queue(new LeftEatRight(((GLambda)this.getLeft()).getVar(), this.getRight()));
-			leftEatRight();
 		}
 		return super.beta();
 	}

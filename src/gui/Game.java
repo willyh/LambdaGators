@@ -29,6 +29,7 @@ public class Game {
 	public void setCurrentPage(Page page) {
 		Container contain = frame.getContentPane();
 		contain.removeAll();
+		if (this.currentPage != null) { this.currentPage.close(); }
 		this.currentPage = page;
 		frame.add(page);
 		frame.validate();

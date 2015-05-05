@@ -1,5 +1,7 @@
 package gui;
 
+import animation.Animation;
+import animation.Shake;
 import calc.Lambda;
 import calc.Term;
 import calc.Var;
@@ -28,13 +30,7 @@ public class GLambda extends Lambda implements GTerm {
 		if (this.getAbstraction() instanceof GVar) {
 			GVar abvar = (GVar) this.getAbstraction();
 			if (abvar.equals(u)) {
-				abvar.shakeAnimation();
-				this.U = replacement.getAbstraction();
-				try {
-					Thread.sleep(Game.EGG_HATCH_TIME);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Animation.queue(new Shake(abvar));
 			}
 		}
 		return replacement;

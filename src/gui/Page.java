@@ -22,5 +22,7 @@ public abstract class Page extends JPanel implements MouseListener, MouseMotionL
 	public String getTitle() {
 		return this.title;
 	}
+	
+	public abstract void close();
 
 }
