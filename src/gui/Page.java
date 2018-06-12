@@ -7,6 +7,10 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 public abstract class Page extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String title;
 	private final Game g;
 

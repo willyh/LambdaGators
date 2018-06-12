@@ -4,12 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import animation.Animation;
 import animation.Pause;
-import calc.Application;
 import calc.Term;
 
 public class TermPage extends Page implements Runnable {

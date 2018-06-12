@@ -52,6 +52,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Term t = Library.parse("V(La.ax)z").alpha();
-		System.out.println(t.toString());
+		System.out.println(new Application(new Lambda(new Var(0), new Var(0)), new Var(1)).beta());
 	}
 }

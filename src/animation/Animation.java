@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class Animation {
-	private static final int FRAME_RATE = 500;
 	private static Queue<Animation> animationQ = new LinkedList<Animation>();
 	private static ArrayList<Animation> activeAnimations = new ArrayList<Animation>();
 	public static final Object animationLock = new Object();
